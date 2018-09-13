@@ -10,24 +10,42 @@ describe('File upload with Providers', () => {
     browser.reload()
   })
 
-  it('should upload a file completely with Google Drive', () => {
+  // not using arrow functions as cb so to keep mocha in the 'this' context
+  it('should upload a file completely with Google Drive', function () {
+    if (process.env.UPPY_GOOGLE_EMAIL === undefined) {
+      console.log('skipping Google Drive integration test')
+      return this.skip()
+    }
+
     startUploadTest(browser, 'GoogleDrive')
     signIntoGoogle(browser)
     finishUploadTest(browser)
   })
 
-  it('should upload a file completely with Instagram', () => {
+  // not using arrow functions as cb so to keep mocha in the 'this' context
+  it('should upload a file completely with Instagram', function () {
+    if (process.env.UPPY_INSTAGRAM_USERNAME === undefined) {
+      console.log('skipping Instagram integration test')
+      return this.skip()
+    }
+
     startUploadTest(browser, 'Instagram')
     // do oauth authentication
     browser.waitForExist('input[name=username]')
     browser.setValue('input[name=username]', process.env.UPPY_INSTAGRAM_USERNAME)
     browser.setValue('input[name=password]', process.env.UPPY_INSTAGRAM_PASSWORD)
-    browser.click('button')
+    browser.click('form button')
 
     finishUploadTest(browser)
   })
 
-  it('should upload a file completely with Dropbox', () => {
+  // not using arrow functions as cb so to keep mocha in the 'this' context
+  it('should upload a file completely with Dropbox', function () {
+    if (process.env.UPPY_GOOGLE_EMAIL === undefined) {
+      console.log('skipping Dropbox integration test')
+      return this.skip()
+    }
+
     startUploadTest(browser, 'Dropbox')
     // do oauth authentication
     browser.waitForVisible('button.auth-google')
@@ -68,4 +86,20 @@ const signIntoGoogle = (browser) => {
   browser.waitForVisible('input[name=password]')
   browser.setValue('input[name=password]', process.env.UPPY_GOOGLE_PASSWORD)
   browser.click('#passwordNext')
+  // if suspicious login was detected, the window will remain unclosed
+  // so we have to confirm the recovery email or phone no
+  if (browser.getTabIds().length > 1) {
+    // confirm recovery email option
+    if (browser.isExisting('li div[data-challengetype="12"]')) {
+      browser.click('li div[data-challengetype="12"]')
+      browser.waitForVisible('input[name=knowledgePreregisteredEmailResponse]')
+      browser.setValue('input[name=knowledgePreregisteredEmailResponse]', process.env.UPPY_GOOGLE_RECOVERY_EMAIL)
+      // confirm recovery phone number
+    } else if (browser.isExisting('#countryList')) {
+      browser.click('div#countryList')
+      browser.click('div[data-value=nl]')
+      browser.setValue('input#phoneNumberId', process.env.UPPY_GOOGLE_PHONE_NO)
+    }
+    browser.click('#next[role=button]')
+  }
 }

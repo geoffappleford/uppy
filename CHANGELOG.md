@@ -91,7 +91,7 @@ What we need to do to release Uppy 1.0
 - [ ] feature: preset for Transloadit that mimics jQuery SDK, check https://github.com/transloadit/jquery-sdk docs (@goto-bus-stop)
 - [x] dashboard: implement Alex and Artur’s Dashboard redesign (@arturi)
 - [ ] feature: basic React Native support (@arturi owner+ios, @ife android)
-- [ ] refactoring: Make `uppy-server` module live in main Uppy repo in `./server` as a second stage todo (after Lerna is done and we're happy) (@ife)
+- [x] refactoring: Make `uppy-server` module live in main Uppy repo in `./server` as a second stage todo (after Lerna is done and we're happy) (@ife)
 - [x] QA: add one integration test that uses a Webpack and React/Redux environment (e.g. via `create-react-app`) (@goto-bus-stop)
 - [x] refactoring: split uppy into small packages, Lerna.js repo? and figure out how to share styles (during work, maybe add PR warning in `.github/*`? use `git mv` for everything) (@goto-bus-stop, @arturi)
 - [x] QA: make it so that all integration tests use `npm pack` and `npm install` first (@ife)
@@ -126,34 +126,131 @@ What we need to do to release Uppy 1.0
 - [ ] transloadit: add error reporting (@goto-bus-stop)
 - [ ] core: use Browserslist config to share between PostCSS, Autoprefixer and Babel https://github.com/browserslist/browserslist, https://github.com/amilajack/eslint-plugin-compat (@arturi)
 - [ ] core: utilize https://github.com/jonathantneal/postcss-preset-env, maybe https://github.com/jonathantneal/postcss-normalize (@arturi)
+- [ ] core: update babel once v7 is out
 - [ ] server: bump minor and deprecate that on npm in favour of @uppy/companion
+- [ ] companion: option validation (can use https://npm.im/ajv + JSON schema)
+- [ ] transloadit: add end2end test for transloadit https://uppy.io/examples/transloadit/ (@arturi, @goto-bus-stop)
+- [ ] companion: rename `serverUrl` and `serverPattern` to `companionUrl` and `companionAllowedHosts` (@ifedapoolarewaju)
+
+## 0.27.3
+
+Released: 2018-09-03.
+
+New versions in this release:
+
+| Package | Version | Package | Version |
+|-|-|-|-|
+| uppy | 0.27.3 | @uppy/instagram | 0.27.3 |
+| @uppy/aws-s3-multipart | 0.27.2 | @uppy/progress-bar | 0.27.2 |
+| @uppy/aws-s3 | 0.27.2 | @uppy/provider-views | 0.27.2 |
+| @uppy/companion-client | 0.27.2 | @uppy/react | 0.27.3 |
+| @uppy/companion | 0.14.3 | @uppy/redux-dev-tools | 0.27.2 |
+| @uppy/core | 0.27.1 | @uppy/status-bar | 0.27.2 |
+| @uppy/dashboard | 0.27.3 | @uppy/thumbnail-generator | 0.27.2 |
+| @uppy/drag-drop | 0.27.2 | @uppy/transloadit | 0.27.3 |
+| @uppy/dropbox | 0.27.2 | @uppy/tus | 0.27.3 |
+| @uppy/file-input | 0.27.2 | @uppy/url | 0.27.3 |
+| @uppy/form | 0.27.2 | @uppy/utils | 0.27.1 |
+| @uppy/golden-retriever | 0.27.2 | @uppy/webcam | 0.27.2 |
+| @uppy/google-drive | 0.27.3 | @uppy/xhr-upload | 0.27.2 |
+| @uppy/informer | 0.27.2 | - | - |
+
+Changes:
+
+- build: Update readme contributors list before publish (#1023 / @goto-bus-stop)
+- build: Enable cssnano safe mode. Fixes `z-index` primarily. (@goto-bus-stop)
+- @uppy/status-bar: Show number of started uploads, fixes #983 (@goto-bus-stop)
+- @uppy/thumbnail-generator: Remove image clear code, fixes #1025. (#1028 / @goto-bus-stop)
+- @uppy/aws-s3-multipart: Proper cleanup on cancellation, fixes #992 (#1021 / @goto-bus-stop)
+- @uppy/utils: Add fallback to `getFileType` (#1022 / @goto-bus-stop)
+- @uppy/transloadit: Lazy load socket.io-client, avoiding `buffer` warnings in IE10 when using the `uppy` CDN package. (#1019 / @goto-bus-stop)
+- @uppy/webcam: Fix for Cordova mangling new File instances (#1034 / @firesharkstudios)
+- @uppy/xhr-upload: Add file name to Blob instance uploads (#1034 / @firesharkstudios)
+- @uppy/transloadit: Only use socket.io's WebSocket transport. (#1029 / @goto-bus-stop)
+- @uppy/companion: Rename `UPPYSERVER_` environment variables to `COMPANION_` + more. The old names still work for now but will be dropped in a future release (#1037 / @kvz)
+- ⚠️ **breaking** @uppy/transloadit: Change hosted Companion URLs to `https://api2.transloadit.com/companion`, using the hosted uppy-server URLs will now throw an error (#1038 / @goto-bus-stop)
+
+## 0.27.2
+
+Released: 2018-08-23.
+
+New versions in this release:
+
+| Package | Version | Package | Version |
+|-|-|-|-|
+| uppy | 0.27.2 | @uppy/react | 0.27.2 |
+| @uppy/companion | 0.14.2 | @uppy/transloadit | 0.27.2 |
+| @uppy/dashboard | 0.27.2 | @uppy/tus | 0.27.2 |
+| @uppy/google-drive | 0.27.2 | @uppy/url | 0.27.2 |
+| @uppy/instagram | 0.27.2 | - | - |
+
+Changes:
+
+- @uppy/companion: Auto deploy Companion. (#1008 / @kiloreux)
+- @uppy/transloadit: Refactors and add fallback if socket connection fails. (#1011 / @goto-bus-stop)
+- ci: No need to web:install if we're not deploying. (#1012 / @goto-bus-stop)
+
+## 0.27.1
+
+Released: 2018-08-16.
+
+New versions in this release:
+
+| Package | Version | Package | Version |
+|-|-|-|-|
+| uppy | 0.27.1 | @uppy/instagram | 0.27.1 |
+| @uppy/aws-s3-multipart | 0.27.1 | @uppy/progress-bar | 0.27.1 |
+| @uppy/aws-s3 | 0.27.1 | @uppy/provider-views | 0.27.1 |
+| @uppy/companion-client | 0.27.1 | @uppy/react | 0.27.1 |
+| @uppy/companion | 0.14.1 | @uppy/redux-dev-tools | 0.27.1 |
+| @uppy/dashboard | 0.27.1 | @uppy/status-bar | 0.27.1 |
+| @uppy/drag-drop | 0.27.1 | @uppy/thumbnail-generator | 0.27.1 |
+| @uppy/dropbox | 0.27.1 | @uppy/transloadit | 0.27.1 |
+| @uppy/file-input | 0.27.1 | @uppy/tus | 0.27.1 |
+| @uppy/form | 0.27.1 | @uppy/url | 0.27.1 |
+| @uppy/golden-retriever | 0.27.1 | @uppy/webcam | 0.27.1 |
+| @uppy/google-drive | 0.27.1 | @uppy/xhr-upload | 0.27.1 |
+| @uppy/informer | 0.27.1 | - | - |
+
+Changes:
+
+- @uppy/companion: use explicit typescript devDependency.
+- @uppy/companion: rename Server → Companion in documentation (#1007 / @goto-bus-stop)
+- website: Load all prism languages (#1004 / @goto-bus-stop)
+- @uppy/core: Fix peerDependencies of plugin packages. (#1005 / @goto-bus-stop)
+- @uppy/companion-client: Send cookies with fetch requests (#1000 / @geoffappleford)
+- Add e2e test for providers (#990 / @ifedapoolarewaju)
+- website: attempt to fix font sizes on mobile vs desktop (@arturi)
+- @uppy/dashboard:  show note and “powered by” when no acquire/sources plugins are used too (@arturi)
+- Update dependencies. (#995 / @goto-bus-stop)
 
 ## 0.27.0
 
 Released: 2018-08-11.
 
-- [x] @uppy/aws-s3-multipart: Check for file existance (#981 / @bartvde)
-- [x] @uppy/aws-s3: Abort all chunk requests when aborting the multipart upload (#967 / @pekala)
-- [x] @uppy/aws-s3: Catch and handle errors in prepareUploadPart (#966 / @pekala)
-- [x] @uppy/core: allow editing plugin titles (names) so that e.g. “Camera” can be translated into different languages, fixes #920 (#942 / @arturi)
-- [x] @uppy/core: fix `setPluginState` (#968 / @goto-bus-stop)
-- [x] @uppy/core: make Uppy run in React Native (by adding `window !== undefined` check) (@arturi / #960)
-- [x] @uppy/core: remove all: initial — was causing issues when multiple uppy stylesheets are used (#942 / @arturi)
-- [x] @uppy/core: ⚠️ **breaking**  default `autoProceed` to `false` (#961 / @arturi)
-- [x] @uppy/dashboard: downgrade `drag-drop` module to support folders again (#942 / @arturi)
-- [x] @uppy/dashboard: fix animation — wait for closing animation to finish before opening modal (#942 / @arturi)
-- [x] @uppy/dashboard: ⚠️ **breaking** Introduce `.uppy-size--md` and `.uppy-size--lg` breakpoint classes; throttle the function that checks for width (#942 / @arturi)
-- [x] @uppy/dashboard: ⚠️ **breaking** UI overhaul: AddFiles panel, significantly improved mobile styles,  (#942 / @arturi, @nqst)
-- [x] @uppy/informer: ⚠️ **breaking** make it monochrome and round. always gray, no status colors (#942 / @arturi)
-- [x] @uppy/provider-views: fix wrong 'no files available' msg flash (#938 / @ifedapoolarewaju)
-- [x] @uppy/url: fix Url plugin reacting to wrong drop/paste events, add ignoreEvent (#942 / @arturi)
-- [x] @uppy/webcam: add webcam permission screen i18 strings, fixes #931 (#942 / @arturi)
-- [x] build: Add object rest spread transform (#965 / @goto-bus-stop)
-- [x] build: Split integration tests and add one using create-react-app (#952 / @goto-bus-stop)
-- [x] build: Upload to CDN when commit starts with “Release” (#989 / @arturi)
-- [x] server: google Drive — move to v3 API (#977 / @pauln)
-- [x] website: docs fixes and improvements @@AJvanLoon)
-- [x] website: list bundle sizes for each package on stats page (#962 / @goto-bus-stop)
+- @uppy/aws-s3-multipart: Check for file existance (#981 / @bartvde)
+- @uppy/aws-s3: Abort all chunk requests when aborting the multipart upload (#967 / @pekala)
+- @uppy/aws-s3: Catch and handle errors in prepareUploadPart (#966 / @pekala)
+- @uppy/companion: ⚠️ **breaking** rename uppy-server to @uppy/companion (#953 / @ifedapoolarewaju)
+- @uppy/companion: google Drive — move to v3 API (#977 / @pauln)
+- @uppy/core: allow editing plugin titles (names) so that e.g. “Camera” can be translated into different languages, fixes #920 (#942 / @arturi)
+- @uppy/core: fix `setPluginState` (#968 / @goto-bus-stop)
+- @uppy/core: make Uppy run in React Native (by adding `window !== undefined` check) (@arturi / #960)
+- @uppy/core: remove all: initial — was causing issues when multiple uppy stylesheets are used (#942 / @arturi)
+- @uppy/core: ⚠️ **breaking**  default `autoProceed` to `false` (#961 / @arturi)
+- @uppy/dashboard: downgrade `drag-drop` module to support folders again (#942 / @arturi)
+- @uppy/dashboard: fix animation — wait for closing animation to finish before opening modal (#942 / @arturi)
+- @uppy/dashboard: ⚠️ **breaking** Introduce `.uppy-size--md` and `.uppy-size--lg` breakpoint classes; throttle the function that checks for width (#942 / @arturi)
+- @uppy/dashboard: ⚠️ **breaking** UI overhaul: AddFiles panel, significantly improved mobile styles,  (#942 / @arturi, @nqst)
+- @uppy/informer: ⚠️ **breaking** make it monochrome and round. always gray, no status colors (#942 / @arturi)
+- @uppy/provider-views: fix wrong 'no files available' msg flash (#938 / @ifedapoolarewaju)
+- @uppy/url: fix Url plugin reacting to wrong drop/paste events, add ignoreEvent (#942 / @arturi)
+- @uppy/webcam: add webcam permission screen i18 strings, fixes #931 (#942 / @arturi)
+- build: Add object rest spread transform (#965 / @goto-bus-stop)
+- build: Split integration tests and add one using create-react-app (#952 / @goto-bus-stop)
+- build: Upload to CDN when commit starts with “Release” (#989 / @arturi)
+- website: docs fixes and improvements @@AJvanLoon)
+- website: list bundle sizes for each package on stats page (#962 / @goto-bus-stop)
 
 ## 0.26.0
 
